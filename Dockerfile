@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.17-alpine3.14 as builder
+FROM golang:1.24-alpine3.20 as builder
 
 RUN apk add --update git
 
