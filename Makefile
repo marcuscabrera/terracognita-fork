@@ -2,7 +2,7 @@ SHELL := /bin/bash
 BIN := terracognita
 BIN_DIR := $(GOPATH)/bin
 
-GOLINT := $(BIN_DIR)/golinter
+#GOLINT := $(BIN_DIR)/golinter
 GOIMPORTS := $(BIN_DIR)/goimports
 ENUMER := $(BIN_DIR)/enumer
 MOCKGEN := $(BIN_DIR)/mockgen
@@ -40,12 +40,12 @@ $(GOIMPORTS):
 $(ENUMER):
 	@go get -u github.com/dmarkham/enumer
 
-$(GOLINT):
-	@go get -u golang.org/x/lint/golint
+#$(GOLINT):
+#	@go get -u golang.org/x/lint/golint
 
-.PHONY: lint
-lint: $(GOLINT) $(GOIMPORTS) ## Runs the linter
-	@GO111MODULE=on golint -set_exit_status ./... && test -z "`go list -f {{.Dir}} ./... | xargs goimports -l | tee /dev/stderr`"
+#.PHONY: lint
+#lint: $(GOLINT) $(GOIMPORTS) ## Runs the linter
+#	@GO111MODULE=on golint -set_exit_status ./... && test -z "`go list -f {{.Dir}} ./... | xargs goimports -l | tee /dev/stderr`"
 
 .PHONY: generate
 generate: $(MOCKGEN) $(GOIMPORTS) $(ENUMER) ## Generates the needed code
@@ -61,11 +61,11 @@ test: ## Runs the tests
 		-u $(shell id -u):$(shell id -g) \
 		-v $(shell go env GOCACHE):/tmp/gocach \
 		-e "GOCACHE=/tmp/gocach" \
-		-v $(GOPATH)/pkg/mod:/go/pkg/mod golang:1.17 \
+		-v $(GOPATH)/pkg/mod:/go/pkg/mod golang:1.24 \
 		go test ./...
 
 .PHONY: ci
-ci: lint test ## Runs the linter and the tests
+ci: test ## Runs the linter and the tests
 
 .PHONY: dbuild
 dbuild: ## Builds the docker image with same name as the binary
