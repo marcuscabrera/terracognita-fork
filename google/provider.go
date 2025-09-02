@@ -12,8 +12,9 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	tfgoogle "github.com/hashicorp/terraform-provider-google/google"
-	googleapi "google.golang.org/api/googleapi"
+	tfprovider "github.com/hashicorp/terraform-provider-google/google/provider"
+	"google.golang.org/api/googleapi"
+	tftransport "github.com/hashicorp/terraform-provider-google/google/transport"
 
 	"github.com/pkg/errors"
 )
@@ -40,19 +41,19 @@ type google struct {
 
 // NewProvider returns a Gooogle Provider
 func NewProvider(ctx context.Context, maxResults uint64, project, region, credentials string) (provider.Provider, error) {
-	cfg := tfgoogle.Config{
+	cfg := tftransport.Config{
 		Credentials: credentials,
 		Project:     project,
 		Region:      region,
 	}
 
-	tfgoogle.ConfigureBasePaths(&cfg)
+	tftransport.ConfigureBasePaths(&cfg)
 	log.Get().Log("func", "google.NewProvider", "msg", "loading TF client")
 	if err := cfg.LoadAndValidate(ctx); err != nil {
 		return nil, fmt.Errorf("could not initialize 'terraform/google.Config.LoadAndValidate()' because: %s", err)
 	}
 
-	tfp := tfgoogle.Provider()
+	tfp := tfprovider.Provider()
 	tfp.SetMeta(&cfg)
 
 	log.Get().Log("func", "google.NewProvider", "msg", "loading GCP client")
@@ -74,8 +75,8 @@ func (g *google) HasResourceType(t string) bool {
 	return err == nil
 }
 
-func (g *google) Region() string                        { return g.tfGoogleClient.(*tfgoogle.Config).Region }
-func (g *google) Project() string                       { return g.tfGoogleClient.(*tfgoogle.Config).Project }
+func (g *google) Region() string                        { return g.tfGoogleClient.(*tftransport.Config).Region }
+func (g *google) Project() string                       { return g.tfGoogleClient.(*tftransport.Config).Project }
 func (g *google) String() string                        { return "google" }
 func (g *google) TagKey() string                        { return "labels" }
 func (g *google) Source() string                        { return "hashicorp/google" }
