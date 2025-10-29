@@ -1,6 +1,8 @@
 ## [Unreleased]
 
 ## Added
+- Documented an AI-assistant prompt to bootstrap the Huawei Cloud provider implementation for TerraCognita contributors.
+- Added an official Huawei Cloud Terraform provider example with AK/SK placeholders and environment variable guidance.
 - Azurerm added new resource: `azurerm_network_interface_security_group_association`
   ([Issue #389](https://github.com/cycloidio/terracognita/issues/389))
 
