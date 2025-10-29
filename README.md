@@ -19,7 +19,7 @@ If you are interested in contributing to Terracognita or simply curious about wh
 
 ## Cloud providers
 
-Terracognita currently imports AWS, GCP, AzureRM e VMware vSphere cloud providers as Terraform (v1.1.9) resource/state.
+Terracognita currently imports AWS, Google Cloud, AzureRM, Huawei Cloud e VMware vSphere cloud providers as Terraform (v1.1.9) resource/state.
 Please see the following versions as follow:
 
 Providers:
@@ -27,7 +27,7 @@ Providers:
  * AzureRM: v3.20.0
  * Google: v4.9.0
  * vSphere: v2.2.0
- * Huawei Cloud: exemplo de configuração mínima disponível em [`docs/examples/huaweicloud/provider.tf`](docs/examples/huaweicloud/provider.tf)
+ * Huawei Cloud: v1.78.0 (exemplo de configuração disponível em [`docs/examples/huaweicloud/provider.tf`](docs/examples/huaweicloud/provider.tf))
 
 ### Extending to new providers
 
@@ -96,6 +96,20 @@ For more options you can always use `terracognita --help` and `terracognita [TER
 specific documentation of the Provider.
 
 We also have `make help` that provide some helpers on using the actual codebase of Terracognita
+
+[Huawei Cloud](docs/providers/huaweicloud.md) imports are available through the `terracognita huaweicloud` command. Example invocation:
+
+```bash
+terracognita huaweicloud \
+  --huaweicloud-access-key "$HW_ACCESS_KEY" \
+  --huaweicloud-secret-key "$HW_SECRET_KEY" \
+  --huaweicloud-project-id "$HW_PROJECT_ID" \
+  --huaweicloud-region "$HW_REGION_NAME" \
+  --hcl ./hcl-output \
+  --tfstate ./state-output
+```
+
+The Huawei Cloud provider automatically discovers credentials from the same environment variables supported by the official Terraform provider (`HW_ACCESS_KEY`, `HW_SECRET_KEY`, `HW_SECURITY_TOKEN`, `HW_REGION_NAME`, `HW_PROJECT_ID`) when the corresponding flags are omitted.
 
 [![asciicast](https://asciinema.org/a/330055.svg)](https://asciinema.org/a/330055)
 

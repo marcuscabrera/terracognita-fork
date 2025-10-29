@@ -349,8 +349,9 @@ func initializeTags(flagName string) ([]tag.Tag, error) {
 
 func init() {
 	cobra.OnInitialize(initViper)
-	RootCmd.AddCommand(awsCmd)
-	RootCmd.AddCommand(googleCmd)
+        RootCmd.AddCommand(awsCmd)
+        RootCmd.AddCommand(huaweicloudCmd)
+        RootCmd.AddCommand(googleCmd)
 	RootCmd.AddCommand(azurermCmd)
 	RootCmd.AddCommand(vsphereCmd)
 	RootCmd.AddCommand(versionCmd)

@@ -1,6 +1,7 @@
 ## [Unreleased]
 
 ## Added
+- Added Huawei Cloud provider support, including the `terracognita huaweicloud` CLI command and bundled Terraform provider v1.78.0.
 - Documented an AI-assistant prompt to bootstrap the Huawei Cloud provider implementation for TerraCognita contributors.
 - Added an official Huawei Cloud Terraform provider example with AK/SK placeholders and environment variable guidance.
 - Azurerm added new resource: `azurerm_network_interface_security_group_association`
