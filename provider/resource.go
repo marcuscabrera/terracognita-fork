@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/chr4/pwgen"
@@ -153,7 +154,15 @@ func NewResource(id, rt string, p Provider) Resource {
 func (r *resource) AttributesReference() ([]string, error) {
 	resourceFunc, ok := providerResources[r.provider.String()]
 	if !ok {
-		return nil, errors.New(fmt.Sprintf("provider %s is not supported", r.provider.String()))
+		// Fallback to the schema for providers that are not present in tfdocs yet.
+		schema := r.TFResource().Schema
+		result := make([]string, 0, len(schema)+1)
+		for name := range schema {
+			result = append(result, name)
+		}
+		sort.Strings(result)
+		result = append(result, "id")
+		return result, nil
 	}
 	res, err := resourceFunc(r.resourceType)
 	if err != nil {
