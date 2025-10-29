@@ -19,7 +19,7 @@ If you are interested in contributing to Terracognita or simply curious about wh
 
 ## Cloud providers
 
-Terracognita currently imports AWS, GCP, AzureRM and VMware vSphere cloud providers as Terraform (v1.1.9) resource/state.
+Terracognita currently imports AWS, GCP, AzureRM e VMware vSphere cloud providers as Terraform (v1.1.9) resource/state.
 Please see the following versions as follow:
 
 Providers:
@@ -27,6 +27,11 @@ Providers:
  * AzureRM: v3.20.0
  * Google: v4.9.0
  * vSphere: v2.2.0
+ * Huawei Cloud: exemplo de configuração mínima disponível em [`docs/examples/huaweicloud/provider.tf`](docs/examples/huaweicloud/provider.tf)
+
+### Extending to new providers
+
+We maintain prompt blueprints to speed up contributions that rely on AI-assisted coding. Engineers planning to add a new cloud integration can start from the [Huawei Cloud provider prompt](docs/prompts/huaweicloud_provider_prompt.md), which documents scope, architecture touch points, and deliverables expected for a production-ready implementation. Para configurar rapidamente um projeto Terraform com o provider oficial, utilize o [exemplo de provider Huaweicloud](docs/examples/huaweicloud/provider.tf), que inclui comentários sobre variáveis de ambiente e fontes oficiais de AK/SK e regiões.
 
 ## Installation
 
