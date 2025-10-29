@@ -33,6 +33,41 @@ Providers:
 
 We maintain prompt blueprints to speed up contributions that rely on AI-assisted coding. Engineers planning to add a new cloud integration can start from the [Huawei Cloud provider prompt](docs/prompts/huaweicloud_provider_prompt.md), which documents scope, architecture touch points, and deliverables expected for a production-ready implementation. Para configurar rapidamente um projeto Terraform com o provider oficial, utilize o [exemplo de provider Huaweicloud](docs/examples/huaweicloud/provider.tf), que inclui comentários sobre variáveis de ambiente e fontes oficiais de AK/SK e regiões.
 
+## Terraform configuration conversion helpers
+
+The repository now ships with experimental Python utilities that translate Terraform configuration files between major providers. The helpers live in [`scripts/terraform_converter.py`](scripts/terraform_converter.py) and expose the following high-level functions:
+
+* `convert_aws_to_huaweicloud()` – migrates common AWS resources (EC2 instances, VPCs, subnets and security groups without inline rules) to their Huawei Cloud equivalents.
+* `convert_azure_to_aws()` – maps AzureRM virtual machines, virtual networks, subnets and network security groups to the corresponding AWS resources.
+* `convert_gcp_to_azure()` – rewrites Google Compute instances, networks and subnetworks into Azure Linux virtual machines, virtual networks, subnets and network interfaces.
+
+Each converter reads Terraform HCL or JSON, performs a best-effort mapping that preserves logical dependencies, and writes a normalized Terraform JSON document for the destination provider. The module returns a `ConversionReport` object so callers can inspect which resources were converted successfully and which ones require manual intervention.
+
+### Usage
+
+```python
+from scripts.terraform_converter import convert_aws_to_huaweicloud
+
+report = convert_aws_to_huaweicloud(
+    input_path="path/to/source/main.tf",
+    output_path="out/huaweicloud.json",
+)
+print("Converted:", report.successful_resources)
+print("Errors:", report.errors)
+```
+
+Install [`python-hcl2`](https://pypi.org/project/python-hcl2/) if you need to parse HCL files instead of Terraform JSON: `pip install python-hcl2`.
+
+### Limitations
+
+The converters intentionally avoid guessing unsupported settings. When a resource cannot be translated, the report includes a detailed validation error. Some known limitations include:
+
+* Security group/firewall rules are not migrated automatically across providers because each platform models them differently.
+* Placeholder variables are added for settings that cannot be inferred (for example Azure resource groups or VNet CIDR blocks when converting from Google Cloud).
+* Complex Terraform expressions might need manual review after the automated conversion, especially when referencing computed attributes.
+
+Contributions are welcome—extend `scripts/terraform_converter.py` with additional mappings to cover more resource types or providers.
+
 ## Installation
 
 ### Binary
